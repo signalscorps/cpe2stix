@@ -1,4 +1,4 @@
-site_name: cve2stix Docs
+site_name: cpe2stix Docs
 markdown_extensions:
   - toc:
       permalink: true
@@ -16,8 +16,8 @@ extra:
   generator: false
   version:
     provider: mike
-repo_url: https://github.com/signalscorps/cve2stix
-repo_name: signalscorps/cve2stix
+repo_url: https://github.com/signalscorps/cpe2stix
+repo_name: signalscorps/cpe2stix
 edit_uri: edit/main/docs/
 copyright: Copyright &copy; Signals Corps
 
