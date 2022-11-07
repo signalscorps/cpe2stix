@@ -50,7 +50,7 @@ If you notice a bug or have a feature request, [please submit them as issues on 
 
 ## A special thanks to...
 
-I would like to thank the authors of the following tools used to build file2stix (making it a hundred times easier);
+I would like to thank the authors of the following tools used to build file2stix (making it a hundred times easier to do so);
 
 * [STIX 2](https://pypi.org/project/stix2/): APIs for serializing and de-serializing STIX2 JSON content
 * [STIX Viewer](https://github.com/traut/stixview): Quickly load bundles produced from your report.
