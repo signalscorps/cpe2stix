@@ -1,0 +1,92 @@
+"""
+Parse CLI arguments and pass to cve2stix.main
+"""
+
+import argparse
+from datetime import datetime, timedelta, date
+from dateutil.relativedelta import relativedelta
+import logging
+import os
+import yaml
+
+import cpe2stix
+from cpe2stix.config import (
+    STIX2_BUNDLES_FOLDER,
+    Config,
+    CREDENTIALS_FILE_PATH,
+    STIX2_OBJECTS_FOLDER,
+)
+from cpe2stix.main import main
+
+logger = logging.getLogger(__name__)
+
+
+def cli():
+    arg_parser = argparse.ArgumentParser(
+        prog=cpe2stix.__appname__,
+        description="Turn CVEs and CPEs in the National Vulnerability database into STIX 2.1 Objects.",
+        allow_abbrev=False,
+    )
+
+    arg_parser.add_argument(
+        "--settings",
+        action="store",
+        type=str,
+        required=True,
+        help="Settings for cve2stix tool",
+    )
+
+    args = arg_parser.parse_args()
+
+    api_key = None
+    if os.path.exists(CREDENTIALS_FILE_PATH):
+        with open(CREDENTIALS_FILE_PATH, "r") as stream:
+            try:
+                data = yaml.safe_load(stream)
+                api_key = data["nvd_api_key"]
+            except:
+                pass
+
+    cpe_start_date = datetime.now() - relativedelta(months=2)
+    cpe_end_date = datetime.now()
+    stix2_objects_folder = STIX2_OBJECTS_FOLDER
+    stix2_bundles_folder = STIX2_BUNDLES_FOLDER
+    run_mode = "download"
+
+    with open(args.settings, "r") as stream:
+        try:
+            data = yaml.safe_load(stream)
+            cpe_start_date = data["earliest-cpe-date"]
+            cpe_end_date = data["latest-cpe-date"]
+            if data.get("stix2-objects-folder"):
+                stix2_objects_folder = data.get("stix2-objects-folder")
+            if data.get("stix2-bundles-folder"):
+                stix2_bundles_folder = data.get("stix2-bundles-folder")
+            if data.get("run-mode"):
+                run_mode = data.get("run-mode")
+
+        except yaml.YAMLError:
+            raise ValueError("Incorrect yaml file in ")
+
+    if not isinstance(cpe_start_date, date):
+        logger.error("cve-earliest-publish-date is not in ISO format.")
+        exit(1)
+
+    if not isinstance(cpe_end_date, date):
+        logger.error("cve-earliest-latest-date is not in ISO format.")
+        exit(1)
+
+    if run_mode not in ("download", "update"):
+        logger.error("run-mode should be one of 'download' or 'update'")
+        exit(1)
+
+    config = Config(
+        cpe_start_date=cpe_start_date,
+        cpe_end_date=cpe_end_date,
+        stix2_objects_folder=stix2_objects_folder,
+        stix2_bundles_folder=stix2_bundles_folder,
+        api_key=api_key,
+        run_mode=run_mode,
+    )
+
+    main(config)
