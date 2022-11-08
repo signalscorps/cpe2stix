@@ -22,15 +22,25 @@ To run the script locally;
 
 ### 1. Add API Key
 
-Once you have your key, create a file in the root of this repository by copying the `nvd-credentials.yml.schema` to a new file called `nvd-credentials.yml`. Enter your API key for the variable `nvd_api_key` in this file.
+Once you have your key, create a file in the root of this repository by copying the `nvd-credentials.yml.schema` to a new file called `credentials.yml`. Enter your API key for the variable `nvd_api_key` in this file.
 
-### 2. Set variable
+### 2. Run the script
 
-TODO
+```shell
+cpe2stix --settings cpe-settings.yml
+```
 
-### 3. Run the script
+Where;
 
-TODO
+* `--settings`: Path to YML file with settings for downloading (updating) cve2stix tool.
+
+The YML settings file has the following fields:
+
+* `earliest-cpe-date`: The datetime from which CPEs are downloaded (updated)
+* `latest-cpe-date`: The datetime upto which CPEs are downloaded (updated)
+* `stix2-objects-folder`: Folder where stix2 objects will be stored.
+* `stix2-bundles-folder`: Folder where stix2 bundles are stored, grouped by CVE year and ID.
+
 
 ## Documentation
 
