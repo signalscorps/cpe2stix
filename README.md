@@ -41,7 +41,6 @@ The YML settings file has the following fields:
 * `stix2-objects-folder`: Folder where stix2 objects will be stored.
 * `stix2-bundles-folder`: Folder where stix2 bundles are stored, grouped by CVE year and ID.
 
-
 ## Documentation
 
 Please take a moment to review the comprehensive documentation included in this repository -- it covers almost all common questions people have about cpe2stix.
